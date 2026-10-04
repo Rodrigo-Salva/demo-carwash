@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAR WASH - Sistema de Gestión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-car-side"></i>
+                    <span>CAR WASH</span>
+                </div>
+                <button class="close-sidebar-btn" id="close-sidebar"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="nav-menu">
+                    <li class="active" data-target="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+                    <li data-target="orders"><i class="fa-solid fa-clipboard-list"></i> Órdenes</li>
+                    <li data-target="clients"><i class="fa-solid fa-users"></i> Clientes</li>
+                    <li data-target="vehicles"><i class="fa-solid fa-car"></i> Vehículos</li>
+                    <li data-target="services"><i class="fa-solid fa-hand-sparkles"></i> Servicios</li>
+                    <li data-target="washers"><i class="fa-solid fa-user-gear"></i> Lavadores</li>
+                    <li data-target="inventory"><i class="fa-solid fa-boxes-stacked"></i> Inventario</li>
+                    <li data-target="payments"><i class="fa-solid fa-file-invoice-dollar"></i> Pagos</li>
+                    <li data-target="reports"><i class="fa-solid fa-chart-line"></i> Reportes</li>
+                    <li data-target="settings"><i class="fa-solid fa-gear"></i> Configuración</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="toggle-sidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="global-search" placeholder="Buscar órdenes, clientes...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i><span class="badge notification-badge">3</span></button>
+                    <div class="user-profile">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Admin" class="avatar">
+                        <div class="user-info">
+                            <span class="user-name">Admin</span>
+                            <span class="user-role">Gerente</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="content-area">
+                
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="page-section active">
+                    <div class="section-header">
+                        <h2>Dashboard</h2>
+                        <button class="btn btn-primary" onclick="app.showPage('orders'); app.openModal('order-modal')"><i class="fa-solid fa-plus"></i> Nueva Orden</button>
+                    </div>
+                    
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-icon blue"><i class="fa-solid fa-dollar-sign"></i></div>
+                            <div class="kpi-details">
+                                <h3>Ingresos del Día</h3>
+                                <p class="kpi-value">S/ 1,250.00</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon success"><i class="fa-solid fa-car-on"></i></div>
+                            <div class="kpi-details">
+                                <h3>Lavados Hoy</h3>
+                                <p class="kpi-value">24</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon warning"><i class="fa-solid fa-clock"></i></div>
+                            <div class="kpi-details">
+                                <h3>Órdenes Pendientes</h3>
+                                <p class="kpi-value">5</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon purple"><i class="fa-solid fa-users"></i></div>
+                            <div class="kpi-details">
+                                <h3>Nuevos Clientes</h3>
+                                <p class="kpi-value">8</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-widgets">
+                        <div class="card recent-orders">
+                            <div class="card-header">
+                                <h3>Órdenes Recientes</h3>
+                                <a href="#" onclick="app.showPage('orders')">Ver todas</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Vehículo</th>
+                                            <th>Servicio</th>
+                                            <th>Estado</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dash-orders-tbody">
+                                        <!-- Generado por JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 24px;">
+                            <div class="card" style="margin-bottom: 0;">
+                                <div class="card-header">
+                                    <h3>Meta Diaria de Ingresos</h3>
+                                </div>
+                                <div class="donut-container">
+                                    <div class="donut-chart" style="background: conic-gradient(var(--secondary) 0% 65%, var(--border-color) 65% 100%);">
+                                        <div class="donut-inner">
+                                            <span class="text-xl">65%</span>
+                                            <span class="text-muted">S/ 1,250</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chart-legend">
+                                    <div class="legend-item"><div class="legend-dot bg-success"></div>Logrado</div>
+                                    <div class="legend-item"><div class="legend-dot" style="background: var(--border-color)"></div>Restante</div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 0;">
+                                <div class="card-header">
+                                    <h3>Nuevos Clientes (Semana)</h3>
+                                </div>
+                                <div class="css-chart" style="height: 120px; border: none; padding: 0;">
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 30%;"></div></div>
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 50%;"></div></div>
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 20%;"></div></div>
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 80%;"></div></div>
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 60%;"></div></div>
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 100%;"></div></div>
+                                    <div class="bar-group"><div class="bar bg-info" style="height: 40%;"></div></div>
+                                </div>
+                                <p class="text-center text-muted" style="margin-top: 10px; font-size: 0.8rem;">Lun - Dom</p>
+                            </div>
+                            
+                            <div class="card washer-status" style="margin-bottom: 0;">
+                                <div class="card-header">
+                                    <h3>Estado de Lavadores</h3>
+                                </div>
+                                <div class="washer-list" id="dash-washers-list">
+                                    <!-- Generado por JS -->
+                                </div>
+                            </div>
+                            
+                            <div class="card" style="margin-bottom: 0;">
+                                <div class="card-header">
+                                    <h3>Satisfacción del Cliente</h3>
+                                </div>
+                                <div style="display:flex; justify-content:center; align-items:center; flex-direction:column; padding: 10px 0;">
+                                    <h1 style="font-size: 3rem; color: var(--warning); margin-bottom: 10px;">4.8</h1>
+                                    <div style="color: var(--warning); font-size: 1.5rem; letter-spacing: 5px;">
+                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="page-section">
+                    <div class="section-header">
+                        <h2>Gestión de Órdenes</h2>
+                        <button class="btn btn-primary" onclick="app.openModal('order-modal')"><i class="fa-solid fa-plus"></i> Nueva Orden</button>
+                    </div>
+                    <div class="card">
+                        <div class="filters">
+                            <input type="text" id="search-orders" class="input-control" placeholder="Buscar por ID o Placa">
+                            <select id="filter-orders-status" class="input-control">
+                                <option value="">Todos los Estados</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En proceso">En proceso</option>
+                                <option value="Completado">Completado</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha/Hora</th>
+                                        <th>Cliente / Placa</th>
+                                        <th>Servicio</th>
+                                        <th>Lavador</th>
+                                        <th>Estado</th>
+                                        <th>Total</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-tbody">
+                                    <!-- Generado por JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Order Detail Section -->
+                <section id="order-detail" class="page-section">
+                    <div class="section-header">
+                        <div class="title-with-back">
+                            <button class="icon-btn" onclick="app.showPage('orders')"><i class="fa-solid fa-arrow-left"></i></button>
+                            <h2>Detalle de Orden <span id="detail-order-id">#ORD-001</span></h2>
+                        </div>
+                        <span class="badge badge-warning" id="detail-order-status">En proceso</span>
+                    </div>
+                    
+                    <div class="progress-container card">
+                        <div class="progress-track">
+                            <div class="step completed">
+                                <div class="step-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                                <div class="step-label">Recibido</div>
+                            </div>
+                            <div class="step active">
+                                <div class="step-icon"><i class="fa-solid fa-water"></i></div>
+                                <div class="step-label">Lavado</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon"><i class="fa-solid fa-wind"></i></div>
+                                <div class="step-label">Secado</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+                                <div class="step-label">Finalizado</div>
+                            </div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 50%;"></div></div>
+                        </div>
+                        <div class="progress-actions mt-4 text-center">
+                            <button class="btn btn-outline" onclick="app.advanceOrderStatus()">Avanzar Estado <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="order-info-grid mt-4">
+                        <div class="card">
+                            <h3>Información del Cliente</h3>
+                            <div class="info-list">
+                                <div class="info-item"><span>Nombre:</span> <strong id="det-client">Juan Pérez</strong></div>
+                                <div class="info-item"><span>Teléfono:</span> <strong id="det-phone">987654321</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Información del Vehículo</h3>
+                            <div class="info-list">
+                                <div class="info-item"><span>Placa:</span> <strong id="det-plate">ABC-123</strong></div>
+                                <div class="info-item"><span>Marca/Modelo:</span> <strong id="det-car">Toyota Yaris</strong></div>
+                                <div class="info-item"><span>Color:</span> <strong id="det-color">Rojo</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Servicio & Pago</h3>
+                            <div class="info-list">
+                                <div class="info-item"><span>Servicio:</span> <strong id="det-service">Lavado Completo</strong></div>
+                                <div class="info-item"><span>Lavador:</span> <strong id="det-washer">Carlos Díaz</strong></div>
+                                <div class="info-item"><span>Total:</span> <strong id="det-total" class="text-xl text-success">S/ 45.00</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clients Section -->
+                <section id="clients" class="page-section">
+                    <div class="section-header">
+                        <h2>Clientes</h2>
+                        <button class="btn btn-primary" onclick="app.openModal('client-modal')"><i class="fa-solid fa-plus"></i> Nuevo Cliente</button>
+                    </div>
+                    <div class="card">
+                        <div class="filters">
+                            <input type="text" id="search-clients" class="input-control" placeholder="Buscar cliente por nombre o DNI">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>DNI / RUT</th>
+                                        <th>Teléfono</th>
+                                        <th>Correo</th>
+                                        <th>Visitas</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clients-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vehicles Section -->
+                <section id="vehicles" class="page-section">
+                    <div class="section-header">
+                        <h2>Vehículos</h2>
+                        <button class="btn btn-primary" onclick="app.populateVehicleClientSelect(); app.openModal('vehicle-modal')"><i class="fa-solid fa-plus"></i> Nuevo Vehículo</button>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Placa</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Año</th>
+                                        <th>Color</th>
+                                        <th>Cliente Propietario</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vehicles-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Services Section -->
+                <section id="services" class="page-section">
+                    <div class="section-header">
+                        <h2>Catálogo de Servicios</h2>
+                        <button class="btn btn-primary" onclick="app.openModal('service-modal')"><i class="fa-solid fa-plus"></i> Nuevo Servicio</button>
+                    </div>
+                    <div class="services-grid" id="services-grid">
+                        <!-- Generado por JS -->
+                    </div>
+                </section>
+
+                <!-- Washers Section -->
+                <section id="washers" class="page-section">
+                    <div class="section-header">
+                        <h2>Personal / Lavadores</h2>
+                        <button class="btn btn-primary" onclick="app.openModal('washer-modal')"><i class="fa-solid fa-plus"></i> Nuevo Lavador</button>
+                    </div>
+                    <div class="washers-grid" id="washers-grid">
+                        <!-- Generado por JS -->
+                    </div>
+                </section>
+
+                <!-- Inventory Section -->
+                <section id="inventory" class="page-section">
+                    <div class="section-header">
+                        <h2>Inventario de Insumos</h2>
+                        <button class="btn btn-primary" onclick="app.openModal('inventory-modal')"><i class="fa-solid fa-plus"></i> Agregar Producto</button>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Stock Actual</th>
+                                        <th>Unidad</th>
+                                        <th>Precio Unit.</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Payments Section -->
+                <section id="payments" class="page-section">
+                    <div class="section-header">
+                        <h2>Control de Pagos</h2>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID Pago</th>
+                                        <th>Orden Ref.</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha</th>
+                                        <th>Método</th>
+                                        <th>Monto</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payments-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="page-section">
+                    <div class="section-header">
+                        <h2>Reportes y Estadísticas</h2>
+                        <div class="filters">
+                            <select class="input-control"><option>Este Año</option><option>Este Mes</option><option>Esta Semana</option></select>
+                        </div>
+                    </div>
+                    <div class="reports-grid">
+                        
+                        <!-- Chart 1: Cashflow (Double Bar) -->
+                        <div class="card" style="grid-column: span 2;">
+                            <div class="card-header">
+                                <h3>Flujo de Caja (Ingresos vs Egresos)</h3>
+                                <div class="chart-legend" style="margin:0;">
+                                    <div class="legend-item"><div class="legend-dot bg-primary"></div>Ingresos</div>
+                                    <div class="legend-item"><div class="legend-dot bg-success"></div>Egresos</div>
+                                </div>
+                            </div>
+                            <div class="css-chart">
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 60%;"></div><div class="bar bar-expense" style="height: 40%;"></div></div><span class="bar-label">Ene</span></div>
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 80%;"></div><div class="bar bar-expense" style="height: 50%;"></div></div><span class="bar-label">Feb</span></div>
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 40%;"></div><div class="bar bar-expense" style="height: 70%;"></div></div><span class="bar-label">Mar</span></div>
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 90%;"></div><div class="bar bar-expense" style="height: 60%;"></div></div><span class="bar-label">Abr</span></div>
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 75%;"></div><div class="bar bar-expense" style="height: 45%;"></div></div><span class="bar-label">May</span></div>
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 100%;"></div><div class="bar bar-expense" style="height: 65%;"></div></div><span class="bar-label">Jun</span></div>
+                                <div class="double-bar-group"><div class="bars-wrapper"><div class="bar bar-income" style="height: 85%;"></div><div class="bar bar-expense" style="height: 35%;"></div></div><span class="bar-label">Jul</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Chart 2: Services Donut -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Distribución de Servicios</h3>
+                            </div>
+                            <div class="donut-container" style="padding-top: 30px;">
+                                <!-- 40% primary, 35% secondary, 15% warning, 10% info -->
+                                <div class="donut-chart" style="background: conic-gradient(var(--primary) 0% 40%, var(--secondary) 40% 75%, var(--warning) 75% 90%, var(--info) 90% 100%); width: 180px; height: 180px;">
+                                    <div class="donut-inner" style="width: 130px; height: 130px;">
+                                        <span class="text-xl">342</span>
+                                        <span class="text-muted">Servicios</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-legend" style="flex-wrap: wrap; justify-content: space-around; margin-top: 30px;">
+                                <div class="legend-item"><div class="legend-dot bg-primary"></div>Básico (40%)</div>
+                                <div class="legend-item"><div class="legend-dot bg-success"></div>Completo (35%)</div>
+                                <div class="legend-item"><div class="legend-dot bg-warning"></div>Premium (15%)</div>
+                                <div class="legend-item"><div class="legend-dot bg-info"></div>Pulido (10%)</div>
+                            </div>
+                        </div>
+
+                        <!-- Chart 3: Horizontal Bars -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Rendimiento por Lavador (Mes)</h3>
+                            </div>
+                            <div class="service-stats" style="margin-top: 20px;">
+                                <div class="stat-row">
+                                    <span style="width: 100px;">Carlos D.</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-primary" style="width: 90%;"></div></div>
+                                    <span style="width: 40px; text-align: right; font-weight: bold;">145</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span style="width: 100px;">Luis M.</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-success" style="width: 75%;"></div></div>
+                                    <span style="width: 40px; text-align: right; font-weight: bold;">112</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span style="width: 100px;">Miguel A.</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-warning" style="width: 50%;"></div></div>
+                                    <span style="width: 40px; text-align: right; font-weight: bold;">85</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span style="width: 100px;">José P.</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-info" style="width: 30%;"></div></div>
+                                    <span style="width: 40px; text-align: right; font-weight: bold;">42</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart 4: Horas Pico (Vertical Bars) -->
+                        <div class="card" style="grid-column: span 2;">
+                            <div class="card-header">
+                                <h3>Horas de Mayor Afluencia</h3>
+                            </div>
+                            <div class="css-chart" style="height: 180px;">
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 20%;"></div><span class="bar-label">08:00</span></div>
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 40%;"></div><span class="bar-label">10:00</span></div>
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 80%;"></div><span class="bar-label">12:00</span></div>
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 100%;"></div><span class="bar-label">14:00</span></div>
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 70%;"></div><span class="bar-label">16:00</span></div>
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 90%;"></div><span class="bar-label">18:00</span></div>
+                                <div class="bar-group"><div class="bar bg-primary" style="height: 50%;"></div><span class="bar-label">20:00</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Chart 5: Marcas Frecuentes -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Vehículos Frecuentes</h3>
+                            </div>
+                            <div class="service-stats" style="margin-top: 20px;">
+                                <div class="stat-row">
+                                    <span style="width: 80px;">Toyota</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-success" style="width: 85%;"></div></div>
+                                    <span style="width: 40px; text-align: right;">45%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span style="width: 80px;">Kia</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-warning" style="width: 60%;"></div></div>
+                                    <span style="width: 40px; text-align: right;">25%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span style="width: 80px;">Hyundai</span>
+                                    <div class="stat-bar-container"><div class="stat-bar bg-info" style="width: 40%;"></div></div>
+                                    <span style="width: 40px; text-align: right;">15%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span style="width: 80px;">Otros</span>
+                                    <div class="stat-bar-container"><div class="stat-bar" style="background:var(--border-color); width: 25%;"></div></div>
+                                    <span style="width: 40px; text-align: right;">15%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart 6: Medios de Pago -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Medios de Pago</h3>
+                            </div>
+                            <div class="donut-container">
+                                <div class="donut-chart" style="background: conic-gradient(var(--info) 0% 50%, var(--success) 50% 80%, var(--warning) 80% 100%); width: 140px; height: 140px;">
+                                    <div class="donut-inner" style="width: 90px; height: 90px;">
+                                        <i class="fa-solid fa-wallet text-xl" style="color: var(--primary);"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item"><div class="legend-dot bg-info"></div>Tarjeta</div>
+                                <div class="legend-item"><div class="legend-dot bg-success"></div>Efectivo</div>
+                                <div class="legend-item"><div class="legend-dot bg-warning"></div>Yape/Plin</div>
+                            </div>
+                        </div>
+
+                        <!-- Chart 7: Ticket Promedio -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Ticket Promedio Semanal</h3>
+                            </div>
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height: 160px;">
+                                <h1 style="font-size: 3rem; color: var(--primary); font-weight: 800;">S/ 48.50</h1>
+                                <p class="text-success"><i class="fa-solid fa-arrow-trend-up"></i> +12.5% vs semana anterior</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Settings Section -->
+                <section id="settings" class="page-section">
+                    <div class="section-header">
+                        <h2>Configuración</h2>
+                    </div>
+                    <div class="card settings-container">
+                        <div class="settings-tabs">
+                            <button class="tab-btn active">Perfil de Empresa</button>
+                            <button class="tab-btn">Horarios</button>
+                            <button class="tab-btn">Notificaciones</button>
+                        </div>
+                        <div class="settings-content">
+                            <form class="settings-form" onsubmit="event.preventDefault(); app.showToast('Configuración guardada', 'success');">
+                                <div class="form-group">
+                                    <label>Nombre del Negocio</label>
+                                    <input type="text" class="input-control" value="CAR WASH Pro">
+                                </div>
+                                <div class="form-group">
+                                    <label>RUC</label>
+                                    <input type="text" class="input-control" value="20123456789">
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección</label>
+                                    <input type="text" class="input-control" value="Av. Principal 123, Ciudad">
+                                </div>
+                                <div class="form-group">
+                                    <label>Teléfono de Contacto</label>
+                                    <input type="text" class="input-control" value="+51 987 654 321">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-4">Guardar Cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="order-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Crear Nueva Orden</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="create-order-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cliente</label>
+                            <select id="ord-client" class="input-control" required onchange="app.filterVehiclesByClient()">
+                                <option value="">Seleccione Cliente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Vehículo (Placa)</label>
+                            <select id="ord-plate" class="input-control" required>
+                                <option value="">Seleccione Vehículo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Servicio</label>
+                            <select id="ord-service" class="input-control" required>
+                                <option value="">Seleccione Servicio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Asignar Lavador</label>
+                            <select id="ord-washer" class="input-control" required>
+                                <option value="">Seleccione Lavador</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="ord-obs" class="input-control" rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Orden</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cliente -->
+    <div class="modal-overlay" id="client-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nuevo Cliente</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="client-form">
+                    <div class="form-group"><label>Nombre Completo</label><input type="text" id="cli-name" class="input-control" required></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>DNI / RUT</label><input type="text" id="cli-doc" class="input-control" required></div>
+                        <div class="form-group"><label>Teléfono</label><input type="text" id="cli-phone" class="input-control" required></div>
+                    </div>
+                    <div class="form-group"><label>Correo Electrónico</label><input type="email" id="cli-email" class="input-control"></div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline close-modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar Cliente</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Vehiculo -->
+    <div class="modal-overlay" id="vehicle-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nuevo Vehículo</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="vehicle-form">
+                    <div class="form-row">
+                        <div class="form-group"><label>Placa</label><input type="text" id="veh-plate" class="input-control" required></div>
+                        <div class="form-group"><label>Cliente Propietario</label>
+                            <select id="veh-client" class="input-control" required></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Marca</label><input type="text" id="veh-brand" class="input-control" required></div>
+                        <div class="form-group"><label>Modelo</label><input type="text" id="veh-model" class="input-control" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Año</label><input type="number" id="veh-year" class="input-control" required></div>
+                        <div class="form-group"><label>Color</label><input type="text" id="veh-color" class="input-control" required></div>
+                    </div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline close-modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar Vehículo</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Servicio -->
+    <div class="modal-overlay" id="service-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nuevo Servicio</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="service-form">
+                    <div class="form-row">
+                        <div class="form-group"><label>Nombre del Servicio</label><input type="text" id="srv-name" class="input-control" required></div>
+                        <div class="form-group"><label>Precio (S/)</label><input type="number" step="0.01" id="srv-price" class="input-control" required></div>
+                    </div>
+                    <div class="form-group"><label>Ícono (Clase FontAwesome, ej: fa-car)</label><input type="text" id="srv-icon" class="input-control" value="fa-car" required></div>
+                    <div class="form-group"><label>Descripción</label><textarea id="srv-desc" class="input-control" rows="2" required></textarea></div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline close-modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar Servicio</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Lavador -->
+    <div class="modal-overlay" id="washer-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nuevo Lavador</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="washer-form">
+                    <div class="form-group"><label>Nombre del Lavador</label><input type="text" id="wsh-name" class="input-control" required></div>
+                    <div class="form-group"><label>URL de Foto</label><input type="url" id="wsh-avatar" class="input-control" value="https://i.pravatar.cc/150?img=15"></div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline close-modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar Lavador</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Inventario -->
+    <div class="modal-overlay" id="inventory-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Producto de Inventario</h3>
+                <button class="icon-btn close-modal"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="inventory-form">
+                    <div class="form-row">
+                        <div class="form-group"><label>Nombre</label><input type="text" id="inv-name" class="input-control" required></div>
+                        <div class="form-group"><label>Categoría</label><input type="text" id="inv-cat" class="input-control" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Stock</label><input type="number" id="inv-stock" class="input-control" required></div>
+                        <div class="form-group"><label>Unidad</label><input type="text" id="inv-unit" class="input-control" required></div>
+                        <div class="form-group"><label>Precio Unit.</label><input type="number" step="0.01" id="inv-price" class="input-control" required></div>
+                    </div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline close-modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar Producto</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
